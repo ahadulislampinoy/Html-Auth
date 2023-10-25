@@ -12,18 +12,21 @@ const auth = firebaseApp.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 // - Set user data
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    const message = document.getElementById("message");
-    const logOutBtn = document.getElementById("logout-btn");
-    if (message) {
-      message.innerText = "Welcome " + user.displayName;
+const setUserData = () => {
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      const message = document.getElementById("message");
+      const logOutBtn = document.getElementById("logout-btn");
+      if (message) {
+        message.innerText =
+          "Welcome " + (user?.displayName ? user?.displayName : "dear!");
+      }
+      if (logOutBtn) {
+        logOutBtn.classList.remove("hidden");
+      }
     }
-    if (logOutBtn) {
-      logOutBtn.classList.remove("hidden");
-    }
-  }
-});
+  });
+};
 
 // - Register new user
 const registerUser = () => {
@@ -41,6 +44,7 @@ const registerUser = () => {
           displayName: name,
         })
         .then(() => {
+          setUserData();
           console.log("Register success");
         })
         .catch((error) => {
@@ -61,6 +65,7 @@ const logInUser = () => {
     .signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+      setUserData();
       console.log("Login success");
     })
     .catch((error) => {
@@ -78,6 +83,7 @@ const logOutUser = () => {
       const message = document.getElementById("message");
       message.innerText = "Not authenticated yet!";
       logOutBtn.classList.add("hidden");
+      setUserData();
       console.log("Logout successfull");
     })
     .catch((error) => {
@@ -127,4 +133,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initial state: show login form by default
   showLoginForm();
+  setUserData();
 });
