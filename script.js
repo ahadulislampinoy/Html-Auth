@@ -76,7 +76,7 @@ const logOutUser = () => {
     .then(() => {
       const logOutBtn = document.getElementById("logout-btn");
       const message = document.getElementById("message");
-      message.innerText = "Who are you?";
+      message.innerText = "Not authenticated yet!";
       logOutBtn.classList.add("hidden");
       console.log("Logout successfull");
     })
